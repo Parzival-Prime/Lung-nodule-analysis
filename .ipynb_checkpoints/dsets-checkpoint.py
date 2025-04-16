@@ -8,21 +8,13 @@ from collections import namedtuple
 import SimpleITK as sitk
 import torch
 from torch.utils.data import Dataset
-from util.util import IrcTuple, XyzTuple, xyz2irc, irc2xyz
-from util.logconf import logging
-from util.disk import getCache
-
-raw_cache = getCache('part2ch11_raw')
+from util import IrcTuple, XyzTuple, xyz2irc, irc2xyz
 
 CandidateInfoTuple = namedtuple(
     'CandidateInfoTuple',
     'isNodule_bool, diameter_mm, series_uid, center_xyz'
 )
 
-log = logging.getLogger(__name__)
-# log.setLevel(logging.WARN)
-# log.setLevel(logging.INFO)
-log.setLevel(logging.DEBUG)
 
 @functools.lru_cache(1)
 def getCandidateInfoList(requireOnDisk_bool=True):
@@ -80,7 +72,7 @@ def getCandidateInfoList(requireOnDisk_bool=True):
 def getCt(series_uid):
     return Ct(series_uid)
 
-@raw_cache.memoize(typed=True)
+@functools.cache
 def getCtRawCandidate(series_uid, center_xyz, width_irc):
     ct = getCt(series_uid)
     ct_chunk, center_irc = ct.getRawCandidate(center_xyz, width_irc)

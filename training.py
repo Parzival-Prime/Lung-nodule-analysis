@@ -6,8 +6,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from dsets import *
 from torch.utils.data import DataLoader
+from util.logconf import logging
 from .dsets import LunaDataset
 from .model import LunaModel
 
